@@ -1,0 +1,74 @@
+import requests
+import json
+
+class GraphQLClient:
+    def __init__(self, url, token):
+        self.url = url
+        self.headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {token}"
+        }
+
+    def execute_query(self, query):
+        data = json.dumps({"query": query})
+        response = requests.post(self.url, headers=self.headers, data=data)
+        return response.json()
+
+# Usage
+if __name__ == "__main__":
+    api_url = "https://api.fireflies.ai/graphql/"
+    bearer_token = "d5f23de2-de12-4db6-a806-703be6d78ca1"
+    query = "{ transcripts { title date } }"
+
+    client = GraphQLClient(api_url, bearer_token)
+    result = client.execute_query(query)
+    print(result)
+    
+    
+    
+pip install openpyxl
+    
+    
+import requests
+import json
+import openpyxl
+
+class GraphQLClient:
+    def __init__(self, url, token):
+        self.url = url
+        self.headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {token}"
+        }
+
+    def execute_query(self, query):
+        data = json.dumps({"query": query})
+        response = requests.post(self.url, headers=self.headers, data=data)
+        return response.json()
+
+def main():
+    api_url = "https://api.fireflies.ai/graphql/"
+    bearer_token = "xxxxxxxxxxxxxxxxxxxxxxx"
+    query = "{ transcripts { title date } }"
+
+    client = GraphQLClient(api_url, bearer_token)
+    result = client.execute_query(query)
+
+    # Create or load an Excel workbook
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+
+    # Write headers
+    sheet['A1'] = "Title"
+    sheet['B1'] = "Date"
+
+    # Write data to the sheet
+    for index, entry in enumerate(result['data']['transcripts'], start=2):
+        sheet[f'A{index}'] = entry['title']
+        sheet[f'B{index}'] = entry['date']
+
+    # Save the workbook to a file
+    workbook.save('transcripts.xlsx')
+
+if __name__ == "__main__":
+    main()
