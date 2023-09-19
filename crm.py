@@ -17,7 +17,7 @@ class GraphQLClient:
 
 def main():
     api_url = "https://api.fireflies.ai/graphql/"
-    bearer_token = "xxxxxxxxxxxxxxxxxxxxxxx"
+    bearer_token = "d5f23de2-de12-4db6-a806-703be6d78ca1"
     query = "{ transcripts { title date } }"
 
     client = GraphQLClient(api_url, bearer_token)
