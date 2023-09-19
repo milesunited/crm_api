@@ -18,10 +18,12 @@ class GraphQLClient:
 def main():
     api_url = "https://api.fireflies.ai/graphql/"
     bearer_token = "d5f23de2-de12-4db6-a806-703be6d78ca1"
-    query = "{ transcripts { title date } }"
+    query = "{ transcripts { title date id participants transcript_url duration } }"
 
     client = GraphQLClient(api_url, bearer_token)
     result = client.execute_query(query)
+    #print(result)
+#    print(result['data'])
 
     # Create or load an Excel workbook
     workbook = openpyxl.Workbook()
@@ -30,11 +32,24 @@ def main():
     # Write headers
     sheet['A1'] = "Title"
     sheet['B1'] = "Date"
+    sheet['C1'] = "ID"
+    sheet['D1'] = "People"
+    sheet['E1'] = "Transcripts"
 
-    # Write data to the sheet
-    for index, entry in enumerate(result):
-        sheet[f'A{index+1}'] = entry[1]
-        sheet[f'B{index+1}'] = entry[2]
+
+
+    data_ = result['data']['transcripts']
+    print(data_[0])
+    for val, dat in enumerate(data_):
+        print(f"val: {str(val)} :: data: {str(dat)} " )
+        sheet[f'A{val+2}'] =str(dat["title"])
+        sheet[f'B{val+2}']  =str(dat["date"])        
+        sheet[f'C{val+2}']  =str(dat["id"])
+        sheet[f'D{val+2}']  =str(dat["participants"])
+        sheet[f'E{val+2}']  =str(dat["transcript_url"])   
+        sheet[f'F{val+2}']  =str(dat["duration"])
+
+
 
     # Save the workbook to a file
     workbook.save('transcripts.xlsx')
